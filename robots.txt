@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://safvexsolutions.github.io/safvex-website/sitemap.xml

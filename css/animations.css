@@ -1,0 +1,74 @@
+/* ==========================================================================
+   SAFVEX — Motion layer
+   GSAP drives most timelines from JS; this file holds pure-CSS keyframes,
+   hover micro-interactions, and page-transition overlay states.
+   ========================================================================== */
+
+/* Page transition overlay */
+.page-transition {
+  position: fixed; inset: 0; z-index: 950; background: var(--bg);
+  transform: translateY(0%);
+  pointer-events: none;
+}
+.page-transition.enter { animation: pt-in 0.7s cubic-bezier(.76,0,.24,1) forwards; }
+.page-transition.leave { animation: pt-out 0.7s cubic-bezier(.76,0,.24,1) forwards; }
+@keyframes pt-in { from { transform: translateY(100%); } to { transform: translateY(0%); } }
+@keyframes pt-out { from { transform: translateY(0%); } to { transform: translateY(-100%); } }
+
+/* Floating blobs (used behind glass panels for ambient depth) */
+.blob {
+  position: absolute; border-radius: 50%; filter: blur(70px); z-index: 0; pointer-events: none;
+  opacity: 0.35;
+}
+.blob-blue { background: var(--blue); }
+.blob-violet { background: var(--violet); }
+.blob-signal { background: var(--signal); }
+.blob-float { animation: float 9s ease-in-out infinite; }
+.blob-float-slow { animation: float 14s ease-in-out infinite reverse; }
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(4%, -6%) scale(1.08); }
+}
+
+/* Card tilt (JS sets --rx/--ry via pointer position) */
+.tilt {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+  transition: transform 0.5s cubic-bezier(.2,.8,.2,1);
+}
+.tilt:hover { transition: transform 0.08s linear; }
+
+/* Text stagger spans (populated by JS splitting text into <span>) */
+.split span {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
+}
+
+/* Marquee pause on hover for readability */
+.industries-track:hover { animation-play-state: paused; }
+
+/* Chatbot panel motion */
+.chatbot-panel {
+  transform-origin: bottom right;
+  transform: scale(0.9) translateY(16px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.3s ease;
+}
+.chatbot-panel.is-open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Multi-step form slide */
+.form-step { display: none; animation: step-in 0.45s cubic-bezier(.2,.8,.2,1); }
+.form-step.is-active { display: block; }
+@keyframes step-in { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Success check */
+@keyframes pop-in { 0% { transform: scale(0.6); opacity: 0; } 60% { transform: scale(1.06); } 100% { transform: scale(1); opacity: 1; } }
+.pop-in { animation: pop-in 0.5s cubic-bezier(.2,.8,.2,1); }
+
+/* Number counter tick (fallback if not using JS interpolation) */
+.count-up { font-variant-numeric: tabular-nums; }
